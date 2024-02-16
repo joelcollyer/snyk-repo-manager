@@ -18,18 +18,15 @@ class AzureDevOpsClient implements IAzureDevOpsClient {
   url;
 
   constructor() {
-    const {
-      VITE_AZURE_ORG_URL,
-      VITE_AZURE_PROJECT,
-      VITE_AZURE_PERSONAL_ACCESS_TOKEN,
-    } = import.meta.env;
+    const { VITE_AZURE_ACCESS_TOKEN, VITE_AZURE_PROJECT, VITE_AZURE_URL } =
+      import.meta.env;
 
     this.headers = {
       "Content-Type": "application/json",
-      Authorization: `Basic ${btoa(`:${VITE_AZURE_PERSONAL_ACCESS_TOKEN}`)}`,
+      Authorization: `Basic ${btoa(`:${VITE_AZURE_ACCESS_TOKEN}`)}`,
     };
     this.project = VITE_AZURE_PROJECT;
-    this.url = VITE_AZURE_ORG_URL;
+    this.url = VITE_AZURE_URL;
   }
 
   async getRepositories() {
@@ -42,9 +39,11 @@ class AzureDevOpsClient implements IAzureDevOpsClient {
       .then((response) => response.json())
       .then(({ value }) => value as AzureRepository[]);
 
-    return repositories.sort(({ name: nameA }, { name: nameB }) =>
+    const sortedRepos = repositories.sort(({ name: nameA }, { name: nameB }) =>
       nameA.localeCompare(nameB)
     );
+
+    return sortedRepos;
   }
 }
 
