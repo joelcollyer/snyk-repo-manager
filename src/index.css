@@ -66,3 +66,18 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+table tbody tr {
+  transition: background ease-in-out .15s;
+}
+table tbody tr:hover {
+  background: rgba(255,255,255, 0.2);
+}
+table tr td {
+  padding: 8px 4px;
+}
+table thead tr td {
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #ccc;
+}
