@@ -29,6 +29,7 @@ class SnykClient implements ISnykClient {
     const path = `${this.url}/orgs/${this.project}/collections`;
     const collections = await fetch(path, {
       headers: this.headers,
+      mode: "no-cors",
       method: "GET",
     }).then((response) => {
       console.log(response);
