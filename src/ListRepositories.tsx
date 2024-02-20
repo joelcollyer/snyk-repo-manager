@@ -1,10 +1,17 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import AzureDevOpsClient, { AzureRepository } from "./AzureDevOpsClient";
 import SnykClient, { SnykCollection } from "./SnykClient";
+import { useLocalStorage } from "./CustomHooks";
 
 function ListRepositories() {
-  const [collections, setCollections] = useState<SnykCollection[]>([]);
-  const [repositories, setRepositories] = useState<AzureRepository[]>([]);
+  const [collections, setCollections] = useLocalStorage<SnykCollection[]>(
+    "collections",
+    []
+  );
+  const [repositories, setRepositories] = useLocalStorage<AzureRepository[]>(
+    "repositories",
+    []
+  );
 
   // TODO: De-dupe this as each respose changes state and re-renders, triggering this effect
   useEffect(() => {
