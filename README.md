@@ -5,7 +5,7 @@
 ### Prerequisites
 
 1. Node v18.x+
-2. Azure Dev Ops (ADO) Admnin access
+2. Azure Dev Ops (ADO) Admin access
 3. Snyk Admin Access
 
 ### Installation
