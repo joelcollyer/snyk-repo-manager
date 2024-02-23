@@ -37,7 +37,11 @@ class AzureDevOpsClient implements IAzureDevOpsClient {
       method: "GET",
     })
       .then((response) => response.json())
-      .then(({ value }) => value as AzureRepository[]);
+      .then(({ value }) => value as AzureRepository[])
+      .catch((error) => {
+        console.error(error);
+        return [] as AzureRepository[];
+      });
 
     const sortedRepos = repositories.sort(({ name: nameA }, { name: nameB }) =>
       nameA.localeCompare(nameB)

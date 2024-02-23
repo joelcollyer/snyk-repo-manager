@@ -8,7 +8,9 @@ interface ISnykClient {
 
 export interface SnykCollection {
   id: string;
-  name: string;
+  attributes: {
+    name: string;
+  };
 }
 
 class SnykClient implements ISnykClient {
@@ -40,11 +42,13 @@ class SnykClient implements ISnykClient {
       headers: this.headers,
       mode: "no-cors",
       method: "GET",
-    }).then((response) => {
-      console.log(response);
-
-      return [];
-    });
+    })
+      .then((response) => response.json())
+      .then(({ data }) => data as SnykCollection[])
+      .catch((error) => {
+        console.error(error);
+        return [] as SnykCollection[];
+      });
 
     return collections;
   }
