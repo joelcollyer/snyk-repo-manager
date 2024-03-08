@@ -1,4 +1,9 @@
+import { requestsManager } from "snyk-request-manager";
+
+global.__filename = "snykClient";
+
 interface ISnykClient {
+  requestManager: requestsManager;
   headers: HeadersInit;
   project: string;
   version: string;
@@ -14,6 +19,7 @@ export interface SnykCollection {
 }
 
 class SnykClient implements ISnykClient {
+  requestManager: requestsManager;
   headers;
   project;
   version;
@@ -31,18 +37,20 @@ class SnykClient implements ISnykClient {
     this.project = VITE_SNYK_PROJECT;
     this.url = VITE_SNYK_URL;
     this.version = "?version=2024-01-23";
+
+    this.requestManager = new requestsManager({
+      snykToken: VITE_SNYK_ACCESS_TOKEN,
+      maxRetryCount: 1,
+    });
   }
 
   /**
    * https://apidocs.snyk.io/?version=2024-01-23#get-/orgs/-org_id-/collections
    */
   async getCollections() {
-    const path = `${this.url}/orgs/${this.project}/collections${this.version}`;
-    const collections = await fetch(path, {
-      headers: this.headers,
-      mode: "no-cors",
-      method: "GET",
-    })
+    const url = `/orgs/${this.project}/collections${this.version}`;
+    const collections = await this.requestManager
+      .request({ verb: "GET", url, useRESTApi: true })
       .then((response) => response.json())
       .then(({ data }) => data as SnykCollection[])
       .catch((error) => {
